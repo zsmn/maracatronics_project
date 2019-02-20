@@ -7,6 +7,7 @@ Delta: 5 (Angle modification at each keyboard command for joint movement)
 
 Basic keyboard commands:
 * Joint 1
+
 'Q' = Add Delta for the angle of joint 1
 'A' = Reduces Delta for the angle of joint 1
 
