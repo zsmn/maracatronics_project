@@ -25,6 +25,8 @@ int new_socket, valread, addrlen = sizeof(address), opt = 1;
 char buffer[1024] = {0}, param[1024] = {0};
 
 // termios getch
+/* due to ubuntu not have the lib 'conio.h', i searched in the web
+for a 'getch' prototype using another libs, and i found this one*/
 int getch(){
 	struct termios oldt, newt;
 	int ch;
@@ -44,14 +46,14 @@ void reset(){
 	cout << "Reseting!" << endl;
 	for(int x = 0; x < 6; x++){
 		while(true){
-			if(joints[x] == 0) break;
-			joints[x] = (joints[x] + 1)%360;
-			this_thread::sleep_for(chrono::milliseconds(5));
+			if(joints[x] == 0) break; // when reach the 0 (reseted), break
+			joints[x] = (joints[x] + 1)%360; // add 1 to angle of joint
+			this_thread::sleep_for(chrono::milliseconds(5)); // sleep the thread
 		}
 	}
 }
 
-void get_angles(){
+void get_angles(){ // just print the values of angles in each joint
 	cout << "There are the angles of the joints:" << endl;
 	for(int x = 0; x < 6; x++){
 		cout << "Joint " << x+1 << " : " << joints[x] << endl;
@@ -61,28 +63,28 @@ void get_angles(){
 void rotate(){
 	cout << "Started a 360 degrees rotating! AmAzInG!" << endl;
 	for(int x = 0; x < 360; x++){
-		joints[0] = (joints[0] + 1)%360;
-		this_thread::sleep_for(chrono::milliseconds(10));
+		joints[0] = (joints[0] + 1)%360; // add 1 to angle of joint 1 (the body), generating the rotation
+		this_thread::sleep_for(chrono::milliseconds(10)); // sleep the thread
 	}
 }
 
-void greetings(){
+void greetings(){ // reset and puts the arm to a specific position and back it to the reset position
 	cout << "You're welcome! :)" << endl;
 	for(int x = 0; x < 90; x++){
-		joints[0] = (joints[0] - 1)%360;
-		this_thread::sleep_for(chrono::milliseconds(10));
+		joints[0] = (joints[0] - 1)%360; 
+		this_thread::sleep_for(chrono::milliseconds(10)); // sleep the thread
 	}
 	for(int x = 0; x < 70; x++){
 		joints[1] = (joints[1] - 1)%360;
-		this_thread::sleep_for(chrono::milliseconds(10));
+		this_thread::sleep_for(chrono::milliseconds(10)); // sleep the thread
 	}
 	for(int x = 0; x < 70; x++){
 		joints[1] = (joints[1] + 1)%360;
-		this_thread::sleep_for(chrono::milliseconds(10));
+		this_thread::sleep_for(chrono::milliseconds(10)); // sleep the thread
 	}
 	for(int x = 0; x < 90; x++){
 		joints[0] = (joints[0] + 1)%360;
-		this_thread::sleep_for(chrono::milliseconds(10));
+		this_thread::sleep_for(chrono::milliseconds(10)); // sleep the thread
 	}
 }
 
@@ -90,6 +92,9 @@ void greetings(){
 void getch_thread(){
 	int ch;
 	while ((ch = getch()) != 27){
+		/* when read a character, it add or remove some quantity of
+		the angle of a specific joint, gerating a sensation of 'movement'
+		of the robotic arm. */
 		// first joint
 		if(ch == 'q') joints[0] = (joints[0] + delta)%360;
 		if(ch == 'a') joints[0] = (joints[0] - delta)%360;
@@ -110,13 +115,13 @@ void getch_thread(){
 		if(ch == 'h') joints[5] = (joints[5] - delta)%360;
 		
 		// extra functions =)
-		if(ch == 92){ // when press '\'
+		if(ch == 92){ // 360 degrees rotation
 			rotate();
 		}
-		if(ch == ','){
+		if(ch == ','){ // reset the joints 
 			reset();
 		}
-		if(ch == '.'){
+		if(ch == '.'){ // getting the angles
 			get_angles();
 		}
 		if(ch == 'z'){ // greetings
@@ -155,6 +160,7 @@ int main(){
 	address.sin_port = htons(PORT); 
 	
 	// socket bind
+	// binding the ip and the port for acess
 	if(bind(socket_fd, (struct sockaddr *)&address, sizeof(address)) < 0){
 		cout << "Bind failed" << endl;
 		return 0;
@@ -162,7 +168,7 @@ int main(){
 	
 	// waiting for connections
 	while(true){
-		if(listen(socket_fd, 3) >= 0){ // if reached, accept the coonection
+		if(listen(socket_fd, 1) >= 0){ // if reached, accept the coonection
 			if(((new_socket = accept(socket_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) >= 0)){
 				cout << "Connection stabilished" << endl; // when enter in the if case, it means that the client and server are connected 
 				valread = read(new_socket, buffer, 1024);
