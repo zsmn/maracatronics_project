@@ -39,6 +39,53 @@ int getch(){
 	return ch;
 }
 
+// some functions
+void reset(){
+	cout << "Reseting!" << endl;
+	for(int x = 0; x < 6; x++){
+		while(true){
+			if(joints[x] == 0) break;
+			joints[x] = (joints[x] + 1)%360;
+			this_thread::sleep_for(chrono::milliseconds(5));
+		}
+	}
+}
+
+void get_angles(){
+	cout << "There are the angles of the joints:" << endl;
+	for(int x = 0; x < 6; x++){
+		cout << "Joint " << x+1 << " : " << joints[x] << endl;
+	}
+}
+
+void rotate(){
+	cout << "Started a 360 degrees rotating! AmAzInG!" << endl;
+	for(int x = 0; x < 360; x++){
+		joints[0] = (joints[0] + 1)%360;
+		this_thread::sleep_for(chrono::milliseconds(10));
+	}
+}
+
+void greetings(){
+	cout << "You're welcome! :)" << endl;
+	for(int x = 0; x < 90; x++){
+		joints[0] = (joints[0] - 1)%360;
+		this_thread::sleep_for(chrono::milliseconds(10));
+	}
+	for(int x = 0; x < 70; x++){
+		joints[1] = (joints[1] - 1)%360;
+		this_thread::sleep_for(chrono::milliseconds(10));
+	}
+	for(int x = 0; x < 70; x++){
+		joints[1] = (joints[1] + 1)%360;
+		this_thread::sleep_for(chrono::milliseconds(10));
+	}
+	for(int x = 0; x < 90; x++){
+		joints[0] = (joints[0] + 1)%360;
+		this_thread::sleep_for(chrono::milliseconds(10));
+	}
+}
+
 // thread function
 void getch_thread(){
 	int ch;
@@ -64,32 +111,23 @@ void getch_thread(){
 		
 		// extra functions =)
 		if(ch == 92){ // when press '\'
-			cout << "Started a 360 degrees rotating! AmAzInG!" << endl;
-			for(int x = 0; x < 360; x++){
-				joints[0] = (joints[0] + 1)%360;
-				this_thread::sleep_for(chrono::milliseconds(10));
-			}
+			rotate();
 		}
 		if(ch == ','){
-			cout << "Reseting!" << endl;
-			for(int x = 0; x < 6; x++){
-				while(true){
-					if(joints[x] == 0) break;
-					joints[x] = (joints[x] + 1)%360;
-					this_thread::sleep_for(chrono::milliseconds(5));
-				}
-			}
+			reset();
 		}
 		if(ch == '.'){
-			cout << "There are the angles of the joints:" << endl;
-			for(int x = 0; x < 6; x++){
-				cout << "Joint " << x+1 << " : " << joints[x] << endl;
-			}
+			get_angles();
+		}
+		if(ch == 'z'){ // greetings
+			reset();
+			greetings();
 		}
 	}
 	
 	exit(1); // when press 'ESC', exit the program
 }
+
 
 int main(){
 	// starting thread and detaching (parallel work)
