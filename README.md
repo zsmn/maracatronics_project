@@ -49,6 +49,6 @@ Delta: 5 (Angle modification at each keyboard command for joint movement)
 
 ' \ ' = Produces a 360 degrees rotation in joint 1
 
-',' = Reset all joints to angle 0
+' , ' = Reset all joints to angle 0
 
-'.' = Show the actual angles of each joint
+' . ' = Show the actual angles of each joint
