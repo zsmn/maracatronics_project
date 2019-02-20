@@ -42,8 +42,7 @@ Basic keyboard commands:
 
 'H' = Reduces Delta for the angle of joint 6
 
-Extra keyboard commands:
-
+* Extra keyboard commands:
 
 
 '\' = Produces a 360 degrees rotation in joint 1
