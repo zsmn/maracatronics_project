@@ -46,6 +46,7 @@ Delta: 5 (Angle modification at each keyboard command for joint movement)
 
 * Extra keyboard commands:
 
+' z ' = Makes a greeting, it resets the angles to do that
 
 ' \ ' = Produces a 360 degrees rotation in joint 1
 
