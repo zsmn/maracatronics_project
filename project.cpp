@@ -124,7 +124,6 @@ void getch_thread(){
 			greetings();
 		}
 	}
-	
 	exit(1); // when press 'ESC', exit the program
 }
 
