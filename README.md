@@ -2,7 +2,9 @@
 Project developed for the maracatronic's selection
 
 IP: 127.0.0.1
+
 Port: 8889
+
 Delta: 5 (Angle modification at each keyboard command for joint movement)
 
 Basic keyboard commands:
