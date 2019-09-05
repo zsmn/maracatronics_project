@@ -315,13 +315,13 @@ int aStarSearch(bool grid[][COL], pii src, pii dest){
     return 0;
 }
 
-void zoomViewAt(sf::Vector2i pixel, sf::RenderWindow& window, float zoom){
-	const sf::Vector2f beforeCoord{ window.mapPixelToCoords(pixel) };
-	sf::View view{ window.getView() };
+void zoomViewAt(Vector2i pixel, RenderWindow& window, float zoom){
+	const Vector2f beforeCoord{ window.mapPixelToCoords(pixel) };
+	View view{ window.getView() };
 	view.zoom(zoom);
 	window.setView(view);
-	const sf::Vector2f afterCoord{ window.mapPixelToCoords(pixel) };
-	const sf::Vector2f offsetCoords{ beforeCoord - afterCoord };
+	const Vector2f afterCoord{ window.mapPixelToCoords(pixel) };
+	const Vector2f offsetCoords{ beforeCoord - afterCoord };
 	view.move(offsetCoords);
 	window.setView(view);
 }
