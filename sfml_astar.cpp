@@ -331,6 +331,8 @@ int main(){
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
     const float zoomAmount{ 1.1f };
+    bool moving = false;
+    Vector2f oldPos;
 
     for(int x = 0; x < ROW; x++){
         for(int y = 0; y < COL; y++){
@@ -367,8 +369,33 @@ int main(){
                 else if (event.mouseWheelScroll.delta < 0)
                     zoomViewAt({ event.mouseWheelScroll.x, event.mouseWheelScroll.y }, window, zoomAmount);
             }
+            if(event.type == Event::MouseButtonPressed){
+                if(event.mouseButton.button == 0){
+                    moving = true;
+                    oldPos = window.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
+                }
+            }
+            if(event.type == Event::MouseButtonReleased){
+                if(event.mouseButton.button == 0){
+                    moving = false;
+                }
+            }
+            if(event.type == Event::MouseMoved){
+                if(moving){
+                    const Vector2f newPos = window.mapPixelToCoords(Vector2i(event.mouseMove.x, event.mouseMove.y));
+                    const Vector2f deltaPos = oldPos - newPos;
+                    View view = window.getView();
+
+                    view.setCenter(view.getCenter() + deltaPos);
+                    window.setView(view);
+
+                    oldPos = window.mapPixelToCoords(Vector2i(event.mouseMove.x, event.mouseMove.y));
+                }
+            }
         }
         window.clear();
+
+        // desenhar as linhas 
         int sz = vec.size();
         for(int x = 0; x < sz - 1; x++){
             Vertex line[] =
@@ -381,6 +408,7 @@ int main(){
             window.draw(line, 2, Lines);
         }
 
+        // desenhar os pontos (sobrepondo as linhas, ai da pra ver as ligações)
         for(int x = 0; x < ROW; x++){
             for(int y = 0; y < COL; y++){
                 if(mat[x][y]){
