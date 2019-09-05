@@ -61,6 +61,7 @@ void tracePath(cell cellDetails[][COL], pii dest){
         vec.push_back(make_pair(p.first, p.second));
     }
     
+    return ;
 }
 
 bool closedList[ROW][COL];
@@ -351,7 +352,6 @@ int main(){
         int d = rng()%COL;
         dest = make_pair(c, d);
         cout << "Failed! Trying with: " << a << " " << b << " trying to reach " << c << " " << d << endl;
-        aStarSearch(mat, src, dest);
     }
 
     RenderWindow window(VideoMode(ROW, COL), "A* Tester");
